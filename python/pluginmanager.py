@@ -19,6 +19,8 @@
 # IN THE SOFTWARE.
 
 import ctypes
+import json
+from datetime import datetime
 
 # Binary Ninja components
 import binaryninja
@@ -157,16 +159,20 @@ class RepoPlugin(object):
 		"""String version of the plugin"""
 		return core.BNPluginGetVersion(self.handle)
 
-	@property
-	def plugin_status(self):
-		"""PluginStatus enumeration indicating if the plugin is up to date or not"""
-		return core.BNPluginGetPluginStatus(self.handle)
 
 	def install_instructions(self, platform):
+		"""
+		Installation instructions for the given platform
+
+		:param str platform: One of the valid platforms "Windows", "Linux", "Darwin"
+		:return: String of the installation instructions for the provided platform
+		:rtype: str
+		"""
 		return core.BNPluginGetInstallInstructions(self.handle, platform)
 
 	@property
 	def install_platforms(self):
+		"""List of platforms this plugin can execute on"""
 		result = []
 		count = ctypes.c_ulonglong(0)
 		platforms = core.BNPluginGetPlatforms(self.handle, count)
@@ -174,6 +180,51 @@ class RepoPlugin(object):
 			result.append(platforms[i])
 		core.BNFreePluginPlatforms(platforms, count)
 		return result
+
+	@property
+	def being_deleted(self):
+		"""Boolean status indicating that the plugin is being deleted"""
+		return core.BNPluginIsBeingDeleted(self.handle)
+
+	@property
+	def being_updated(self):
+		"""Boolean status indicating that the plugin is being updated"""
+		return core.BNPluginIsBeingUpdated(self.handle)
+
+	@property
+	def running(self):
+		"""Boolean status indicating that the plugin is currently running"""
+		return core.BNPluginIsRunning(self.handle)
+
+	@property
+	def update_pending(self):
+		"""Boolean status indicating that the plugin has updates will be installed after the next restart"""
+		return core.BNPluginIsUpdatePending(self.handle)
+
+	@property
+	def disable_pending(self):
+		"""Boolean status indicating that the plugin will be disabled after the next restart"""
+		return core.BNPluginIsDisablePending(self.handle)
+
+	@property
+	def delete_pending(self):
+		"""Boolean status indicating that the plugin will be deleted after the next restart"""
+		return core.BNPluginIsDeletePending(self.handle)
+
+	@property
+	def update_available(self):
+		"""Boolean status indicating that the plugin has updates available"""
+		return core.BNPluginIsUpdateAvailable(self.handle)
+
+	@property
+	def project_data(self):
+		"""Gets a json object of the project data field"""
+		return json.loads(core.BNPluginGetProjectData(self.handle))
+
+	@property
+	def last_update(self):
+		"""Returns a datetime object representing the plugins last update"""
+		return datetime.fromtimestamp(core.BNPluginGetLastUpdate(self.handle))
 
 class Repository(object):
 	"""
@@ -270,14 +321,14 @@ class RepositoryManager(object):
 		"""
 		``add_repository`` adds a new plugin repository for the manager to track.
 
-		:param str url: URL to the git repository where the plugins are stored.
+		:param str url: URL to the plugins.json containing the records for this repository
 		:param str repopath: path to where the repository will be stored on disk locally
 		:return: Boolean value True if the repository was successfully added, False otherwise.
 		:rtype: Boolean
 		:Example:
 
 			>>> mgr = RepositoryManager()
-			>>> mgr.add_repository("https://github.com/vector35/community-plugins.git", "myrepo")
+			>>> mgr.add_repository("https://raw.githubusercontent.com/Vector35/community-plugins/master/plugins.json", "community")
 			True
 			>>>
 		"""
