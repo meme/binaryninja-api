@@ -29,13 +29,6 @@ public:
 		SortAlphabeticallyAcending,
 		SortAlphabeticallyDecending
 	};
-private:
-	enum SymbolListUpdateType
-	{
-		AddedToSymbolList,
-		RemovedFromSymbolList,
-		UpdatedInSymbolList
-	};
 
 	struct NamedObject
 	{
@@ -91,6 +84,14 @@ private:
 		BNSymbolType getType() const { return sym->GetType(); }
 	};
 
+private:
+	enum SymbolListUpdateType
+	{
+		AddedToSymbolList,
+		RemovedFromSymbolList,
+		UpdatedInSymbolList
+	};
+
 	struct SymbolListUpdateEvent
 	{
 		NamedObject rec;
@@ -121,8 +122,7 @@ private:
 	std::set<std::string> m_archNames;
 	std::vector<NamedObject> m_allSyms;
 	std::vector<NamedObject> m_curSyms;
-	FunctionRef m_currentFunc;
-	SymbolRef m_currentSym;
+	NamedObject m_currentSym;
 	std::string m_filter;
 
 	std::mutex m_updateMutex;
@@ -179,7 +179,7 @@ public:
 
 	void updateFonts();
 	bool isValidType(const NamedObject& rec);
-	bool setCurrentSymbol(SymbolRef sym);
+	bool setCurrentObject(const NamedObject& rec);
 	bool setCurrentFunction(FunctionRef func);
 	QModelIndex findSymbol(const NamedObject& rec);
 	QModelIndex findCurrentSymbol();
@@ -228,6 +228,11 @@ public:
 	void sortSymbols(SortType type);
 	void setSortType(SortType type) { m_sortType = type; }
 	SortType getSortType() const { return m_sortType; }
+	NamedObject getCurrentSym() const { return m_currentSym; }
+
+Q_SIGNALS:
+	void afterListReset();
+	void beforeListReset();
 };
 
 
@@ -251,6 +256,9 @@ class BINARYNINJAUIAPI SymbolList: public QListView, public FilterTarget
 	bool m_showDataVars;
 	std::string m_filter;
 	SymbolListModel::SortType m_sortType;
+	SymbolListModel::NamedObject m_index;
+	int m_scrollPosition;
+	bool m_doubleClick;
 
 public:
 	SymbolList(SymbolsView* parent, ViewFrame* frame, BinaryViewRef data);
@@ -279,4 +287,8 @@ protected:
 private Q_SLOTS:
 	void goToSymbol(const QModelIndex& i);
 	void updateTimerEvent();
+	void savePosition();
+	void restorePosition();
+	void saveIndex(const QModelIndex& index);
+	void clearIndex(const QModelIndex& index);
 };
