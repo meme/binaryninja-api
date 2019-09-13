@@ -682,14 +682,13 @@ namespace BinaryNinja
 	void AddRequiredPluginDependency(const std::string& name);
 	void AddOptionalPluginDependency(const std::string& name);
 	bool DemangleMS(Architecture* arch,
-	                const std::string& mangledName,
-	                Type** outType,
-	                QualifiedName& outVarName);
-	bool DemangleGNU3(Architecture* arch,
-	                  const std::string& mangledName,
-	                  Type** outType,
-	                  QualifiedName& outVarName);
-
+		const std::string& mangledName,
+		Type** outType,
+		QualifiedName& outVarName);
+	bool DemangleGNU3(Ref<Architecture> arch,
+		const std::string& mangledName,
+		Type** outType,
+		QualifiedName& outVarName);
 	void RegisterMainThread(MainThreadActionHandler* handler);
 	Ref<MainThreadAction> ExecuteOnMainThread(const std::function<void()>& action);
 	void ExecuteOnMainThreadAndWait(const std::function<void()>& action);
@@ -2538,6 +2537,7 @@ namespace BinaryNinja
 
 		std::vector<StructureMember> GetMembers() const;
 		bool GetMemberByName(const std::string& name, StructureMember& result) const;
+		bool GetMemberAtOffset(int64_t offset, StructureMember& result) const;
 		uint64_t GetWidth() const;
 		void SetWidth(size_t width);
 		size_t GetAlignment() const;

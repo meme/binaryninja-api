@@ -154,6 +154,7 @@ private Q_SLOTS:
 	void skipAndReturnZero();
 	void skipAndReturnValue();
 
+	void makeTypes(TypeRef type);
 	void makeInt8();
 	void makeInt16();
 	void makeInt32();
@@ -162,7 +163,11 @@ private Q_SLOTS:
 	void makePtr();
 	void makeString();
 	void changeType();
-	void inferStructureType();
+	void createStructOrinferStructureType();
+	void createArray();
+	void createStruct();
+	void createNewTypes();
+
 	size_t getStringLength(uint64_t startAddr);
 
 	void displayAsDefault();

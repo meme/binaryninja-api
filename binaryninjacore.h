@@ -242,6 +242,8 @@ extern "C"
 		NameSpaceSeparatorToken = 23,
 		TagToken = 24,
 		StructOffsetToken = 25,
+		StructOffsetByteValueToken = 26,
+		StructureHexDumpTextToken = 27,
 		// The following are output by the analysis system automatically, these should
 		// not be used directly by the architecture plugins
 		CodeSymbolToken = 64,
@@ -3482,6 +3484,7 @@ extern "C"
 	BINARYNINJACOREAPI void BNFreeStructure(BNStructure* s);
 
 	BINARYNINJACOREAPI BNStructureMember* BNGetStructureMemberByName(BNStructure* s, const char* name);
+	BINARYNINJACOREAPI BNStructureMember* BNGetStructureMemberAtOffset(BNStructure* s, int64_t offset);
 	BINARYNINJACOREAPI void BNFreeStructureMember(BNStructureMember* s);
 	BINARYNINJACOREAPI BNStructureMember* BNGetStructureMembers(BNStructure* s, size_t* count);
 	BINARYNINJACOREAPI void BNFreeStructureMemberList(BNStructureMember* members, size_t count);
@@ -3837,6 +3840,7 @@ extern "C"
 	BINARYNINJACOREAPI void BNAddGraphReportToCollection(BNReportCollection* reports, BNBinaryView* view,
 		const char* title, BNFlowGraph* graph);
 
+	BINARYNINJACOREAPI bool BNIsGNU3MangledString(const char* mangledName);
 	BINARYNINJACOREAPI bool BNDemangleGNU3(BNArchitecture* arch,
 	                                       const char* mangledName,
 	                                       BNType** outType,
