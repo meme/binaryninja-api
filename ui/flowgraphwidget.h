@@ -182,6 +182,7 @@ public:
 	virtual void OnAnalysisFunctionUpdated(BinaryNinja::BinaryView* data, BinaryNinja::Function* func) override;
 	virtual void OnAnalysisFunctionUpdateRequested(BinaryNinja::BinaryView* data, BinaryNinja::Function* func) override;
 	virtual void OnDataMetadataUpdated(BinaryNinja::BinaryView* data, uint64_t offset) override;
+	virtual void OnTagsUpdated(BinaryNinja::BinaryView* data, uint64_t offset) override;
 
 	void setInitialGraph(FlowGraphRef graph);
 	void setInitialGraph(FlowGraphRef graph, uint64_t addr);

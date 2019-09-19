@@ -10,6 +10,7 @@
 #include "dockhandler.h"
 #include "viewframe.h"
 
+#define TAGS_UPDATE_CHECK_INTERVAL 200
 
 class BINARYNINJAUIAPI TagTypeListModel: public QAbstractItemModel
 {
@@ -18,6 +19,7 @@ class BINARYNINJAUIAPI TagTypeListModel: public QAbstractItemModel
 	QWidget* m_owner;
 	BinaryViewRef m_data;
 	std::vector<TagTypeRef> m_refs;
+	std::map<std::string, uint64_t> m_count;
 
 public:
 	TagTypeListModel(QWidget* parent, BinaryViewRef data);
@@ -81,7 +83,10 @@ class BINARYNINJAUIAPI TagTypeList: public QTableView, public DockContextHandler
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event) override;
 
-	virtual void OnDataMetadataUpdated(BinaryNinja::BinaryView*, uint64_t) override;
+	virtual void OnTagsUpdated(BinaryNinja::BinaryView*, uint64_t) override;
+
+	virtual void showEvent(QShowEvent *event) override;
+	virtual void hideEvent(QHideEvent *event) override;
 
 private:
 	void createTagType();

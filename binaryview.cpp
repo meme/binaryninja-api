@@ -122,6 +122,14 @@ void BinaryDataNotification::DataMetadataUpdatedCallback(void* ctxt, BNBinaryVie
 }
 
 
+void BinaryDataNotification::TagsUpdatedCallback(void* ctxt, BNBinaryView* object, uint64_t offset)
+{
+	BinaryDataNotification* notify = (BinaryDataNotification*)ctxt;
+	Ref<BinaryView> view = new BinaryView(BNNewViewReference(object));
+	notify->OnTagsUpdated(view, offset);
+}
+
+
 void BinaryDataNotification::SymbolAddedCallback(void* ctxt, BNBinaryView* object, BNSymbol* symobj)
 {
 	BinaryDataNotification* notify = (BinaryDataNotification*)ctxt;
@@ -197,6 +205,7 @@ BinaryDataNotification::BinaryDataNotification()
 	m_callbacks.dataVariableRemoved = DataVariableRemovedCallback;
 	m_callbacks.dataVariableUpdated = DataVariableUpdatedCallback;
 	m_callbacks.dataMetadataUpdated = DataMetadataUpdatedCallback;
+	m_callbacks.tagsUpdated = TagsUpdatedCallback;
 	m_callbacks.symbolAdded = SymbolAddedCallback;
 	m_callbacks.symbolUpdated = SymbolUpdatedCallback;
 	m_callbacks.symbolRemoved = SymbolRemovedCallback;
@@ -2047,15 +2056,15 @@ std::vector<Ref<TagType>> BinaryView::GetTagTypes()
 }
 
 
-void BinaryView::AddTag(Ref<Tag> tag)
+void BinaryView::AddTag(Ref<Tag> tag, bool user)
 {
-	BNAddTag(m_object, tag->GetObject());
+	BNAddTag(m_object, tag->GetObject(), user);
 }
 
 
-void BinaryView::RemoveTag(Ref<Tag> tag)
+void BinaryView::RemoveTag(Ref<Tag> tag, bool user)
 {
-	BNRemoveTag(m_object, tag->GetObject());
+	BNRemoveTag(m_object, tag->GetObject(), user);
 }
 
 
@@ -2106,6 +2115,18 @@ std::vector<TagReference> BinaryView::GetTagReferencesOfType(Ref<TagType> tagTyp
 	size_t count;
 	BNTagReference* refs = BNGetTagReferencesOfType(m_object, tagType->GetObject(), &count);
 	return TagReference::ConvertAndFreeTagReferenceList(refs, count);
+}
+
+
+size_t BinaryView::GetAllTagReferencesOfTypeCount(Ref<TagType> tagType)
+{
+	return BNGetAllTagReferencesOfTypeCount(m_object, tagType->GetObject());
+}
+
+
+size_t BinaryView::GetTagReferencesOfTypeCount(Ref<TagType> tagType)
+{
+	return BNGetTagReferencesOfTypeCount(m_object, tagType->GetObject());
 }
 
 

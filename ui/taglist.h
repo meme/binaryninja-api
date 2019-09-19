@@ -140,7 +140,10 @@ protected:
 	void selectFirstItem() override;
 	void activateFirstItem() override;
 
-	virtual void OnDataMetadataUpdated(BinaryNinja::BinaryView*, uint64_t) override;
+	virtual void OnTagsUpdated(BinaryNinja::BinaryView*, uint64_t) override;
+
+	virtual void showEvent(QShowEvent *event) override;
+	virtual void hideEvent(QHideEvent *event) override;
 
 private Q_SLOTS:
 	void hoverTimerEvent();
