@@ -2489,7 +2489,7 @@ namespace BinaryNinja
 			const Confidence<bool>& vltl = Confidence<bool>(false, 0), BNReferenceType refType = PointerReferenceType);
 		static Ref<Type> ArrayType(const Confidence<Ref<Type>>& type, uint64_t elem);
 		static Ref<Type> FunctionType(const Confidence<Ref<Type>>& returnValue,
-			const Confidence<Ref<CallingConvention>>& callingConvention,
+			const Confidence<Ref<CallingConvention>>& callingConvention, const Ref<Platform>& platform,
 			const std::vector<FunctionParameter>& params, const Confidence<bool>& varArg = Confidence<bool>(false, 0),
 			const Confidence<int64_t>& stackAdjust = Confidence<int64_t>(0, 0));
 

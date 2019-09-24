@@ -254,7 +254,6 @@ int main(int argc, char* argv[])
 		}
 	}
 
-
 	fprintf(out, "\n# Structure definitions\n");
 	set<QualifiedName> structsToProcess;
 	set<QualifiedName> finishedStructs;

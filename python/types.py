@@ -658,7 +658,7 @@ class Type(object):
 		return Type(core.BNCreateArrayType(type_conf, count))
 
 	@classmethod
-	def function(self, ret, params, calling_convention=None, variable_arguments=None, stack_adjust=None):
+	def function(self, ret, params, platform, calling_convention=None, variable_arguments=None, stack_adjust=None):
 		"""
 		``function`` class method for creating an function Type.
 
@@ -722,7 +722,7 @@ class Type(object):
 		stack_adjust_conf.value = stack_adjust.value
 		stack_adjust_conf.confidence = stack_adjust.confidence
 
-		return Type(core.BNCreateFunctionType(ret_conf, conv_conf, param_buf, len(params),
+		return Type(core.BNCreateFunctionType(ret_conf, conv_conf, platform, param_buf, len(params),
 			vararg_conf, stack_adjust_conf))
 
 	@classmethod

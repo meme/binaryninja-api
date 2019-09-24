@@ -831,7 +831,7 @@ Ref<Type> Type::ArrayType(const Confidence<Ref<Type>>& type, uint64_t elem)
 
 
 Ref<Type> Type::FunctionType(const Confidence<Ref<Type>>& returnValue,
-	const Confidence<Ref<CallingConvention>>& callingConvention,
+	const Confidence<Ref<CallingConvention>>& callingConvention, const Ref<Platform>& platform,
 	const std::vector<FunctionParameter>& params, const Confidence<bool>& varArg,
 	const Confidence<int64_t>& stackAdjust)
 {
@@ -842,6 +842,8 @@ Ref<Type> Type::FunctionType(const Confidence<Ref<Type>>& returnValue,
 	BNCallingConventionWithConfidence callingConventionConf;
 	callingConventionConf.convention = callingConvention ? callingConvention->GetObject() : nullptr;
 	callingConventionConf.confidence = callingConvention.GetConfidence();
+
+	BNPlatform* bnPlatform = platform->m_object;
 
 	BNFunctionParameter* paramArray = new BNFunctionParameter[params.size()];
 	for (size_t i = 0; i < params.size(); i++)
@@ -863,7 +865,7 @@ Ref<Type> Type::FunctionType(const Confidence<Ref<Type>>& returnValue,
 	stackAdjustConf.value = stackAdjust.GetValue();
 	stackAdjustConf.confidence = stackAdjust.GetConfidence();
 
-	Type* type = new Type(BNCreateFunctionType(&returnValueConf, &callingConventionConf,
+	Type* type = new Type(BNCreateFunctionType(&returnValueConf, &callingConventionConf, bnPlatform,
 		paramArray, params.size(), &varArgConf, &stackAdjustConf));
 	delete[] paramArray;
 	return type;
