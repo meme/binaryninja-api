@@ -69,7 +69,7 @@ public:
 };
 
 
-class BINARYNINJAUIAPI TagTypeList: public QTableView, public DockContextHandler
+class BINARYNINJAUIAPI TagTypeList: public QTableView, public DockContextHandler, public BinaryNinja::BinaryDataNotification
 {
 	Q_OBJECT
 	Q_INTERFACES(DockContextHandler)
@@ -92,6 +92,8 @@ protected:
 
 	virtual void showEvent(QShowEvent *event) override;
 	virtual void hideEvent(QHideEvent *event) override;
+
+	virtual void OnTagTypeUpdated(BinaryNinja::BinaryView*, const TagTypeRef) override;
 
 private:
 	void createTagType();

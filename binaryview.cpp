@@ -122,6 +122,15 @@ void BinaryDataNotification::DataMetadataUpdatedCallback(void* ctxt, BNBinaryVie
 }
 
 
+void BinaryDataNotification::TagTypeUpdatedCallback(void* ctxt, BNBinaryView* object, BNTagType* tagType)
+{
+	BinaryDataNotification* notify = (BinaryDataNotification*)ctxt;
+	Ref<BinaryView> view = new BinaryView(BNNewViewReference(object));
+	Ref<TagType> tagTypeRef = new TagType(BNNewTagTypeReference(tagType));
+	notify->OnTagTypeUpdated(view, tagTypeRef);
+}
+
+
 void BinaryDataNotification::TagAddedCallback(void* ctxt, BNBinaryView* object, BNTagReference* tagRef)
 {
 	BinaryDataNotification* notify = (BinaryDataNotification*)ctxt;
@@ -221,6 +230,7 @@ BinaryDataNotification::BinaryDataNotification()
 	m_callbacks.dataVariableRemoved = DataVariableRemovedCallback;
 	m_callbacks.dataVariableUpdated = DataVariableUpdatedCallback;
 	m_callbacks.dataMetadataUpdated = DataMetadataUpdatedCallback;
+	m_callbacks.tagTypeUpdated = TagTypeUpdatedCallback;
 	m_callbacks.tagAdded = TagAddedCallback;
 	m_callbacks.tagUpdated = TagUpdatedCallback;
 	m_callbacks.tagRemoved = TagRemovedCallback;
