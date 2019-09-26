@@ -140,7 +140,9 @@ protected:
 	void selectFirstItem() override;
 	void activateFirstItem() override;
 
-	virtual void OnTagsUpdated(BinaryNinja::BinaryView*, uint64_t) override;
+	virtual void OnTagAdded(BinaryNinja::BinaryView*, const BinaryNinja::TagReference&) override;
+	virtual void OnTagUpdated(BinaryNinja::BinaryView*, const BinaryNinja::TagReference&) override;
+	virtual void OnTagRemoved(BinaryNinja::BinaryView*, const BinaryNinja::TagReference&) override;
 
 	virtual void showEvent(QShowEvent *event) override;
 	virtual void hideEvent(QHideEvent *event) override;

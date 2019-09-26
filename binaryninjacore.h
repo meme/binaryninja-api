@@ -137,6 +137,7 @@ extern "C"
 	struct BNStructure;
 	struct BNTagType;
 	struct BNTag;
+	struct BNTagReference;
 	struct BNNamedTypeReference;
 	struct BNEnumeration;
 	struct BNCallingConvention;
@@ -1078,7 +1079,9 @@ extern "C"
 		void (*dataVariableRemoved)(void* ctxt, BNBinaryView* view, BNDataVariable* var);
 		void (*dataVariableUpdated)(void* ctxt, BNBinaryView* view, BNDataVariable* var);
 		void (*dataMetadataUpdated)(void* ctxt, BNBinaryView* view, uint64_t offset);
-		void (*tagsUpdated)(void* ctxt, BNBinaryView* view, uint64_t offset);
+		void (*tagAdded)(void* ctxt, BNBinaryView* view, BNTagReference* tagRef);
+		void (*tagUpdated)(void* ctxt, BNBinaryView* view, BNTagReference* tagRef);
+		void (*tagRemoved)(void* ctxt, BNBinaryView* view, BNTagReference* tagRef);
 		void (*symbolAdded)(void* ctxt, BNBinaryView* view, BNSymbol* sym);
 		void (*symbolUpdated)(void* ctxt, BNBinaryView* view, BNSymbol* sym);
 		void (*symbolRemoved)(void* ctxt, BNBinaryView* view, BNSymbol* sym);
